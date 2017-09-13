@@ -1,7 +1,6 @@
 package sala
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -46,20 +45,22 @@ func (w *Worker) Run() {
 
 	decoder := DefaultDecoder
 
-	if w.cfg.decoder != nil {
-		decoder = w.cfg.decoder
+	if w.cfg.Decoder != nil {
+		decoder = w.cfg.Decoder
 	}
 
+	log.Printf("Start consume message")
 	// consume messages, watch errors and notifications
 	for {
 		select {
 		case msg, more := <-w.consumer.Messages():
 			if more {
-				fmt.Fprintf(os.Stdout, "%s/%d/%d\t%s\t%s\n", msg.Topic, msg.Partition, msg.Offset, msg.Key, msg.Value)
-				if message, err := decoder.DecodeValue(msg.Value); err != nil {
+				if message, err := decoder.DecodeValue(msg.Value); err == nil {
 					w.apply(message)
+					w.consumer.MarkOffset(msg, "") // mark message as processed
+				} else {
+					log.Fatal(err)
 				}
-				w.consumer.MarkOffset(msg, "") // mark message as processed
 			}
 		case err, more := <-w.consumer.Errors():
 			if more {

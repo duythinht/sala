@@ -2,7 +2,6 @@ package avro
 
 import (
 	"encoding/binary"
-	"encoding/json"
 	"errors"
 	"sync"
 
@@ -33,20 +32,19 @@ func (ad *AvroDecoder) DecodeValue(data []byte) (map[string]interface{}, error) 
 		if err != nil {
 			return nil, err
 		}
+
 		native, _, err := codec.NativeFromBinary(data[5:])
 		if err != nil {
 			return nil, err
 		}
 
-		textual, err := codec.TextualFromNative(nil, native)
-		result := make(map[string]interface{})
-		if err := json.Unmarshal(textual, &result); err != nil {
-			return nil, err
+		result, ok := native.(map[string]interface{})
+		if !ok {
+			return nil, errors.New("decode error, invalid map type")
 		}
+
 		return result, nil
 	}
-
-	return nil, errors.New("Unknown error")
 }
 
 func (ad *AvroDecoder) getCodecById(id int) (*goavro.Codec, error) {

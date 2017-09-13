@@ -6,7 +6,7 @@ type Config struct {
 	brokers []string
 	topics  []string
 	group   string
-	decoder Decoder
+	Decoder Decoder
 }
 
 func NewConfig(addrs string, topics string, group string) *Config {
@@ -16,6 +16,6 @@ func NewConfig(addrs string, topics string, group string) *Config {
 		brokers: brokers,
 		topics:  topicsList,
 		group:   group,
-		decoder: nil,
+		Decoder: nil,
 	}
 }
