@@ -15,6 +15,14 @@ type AvroDecoder struct {
 	codecs            *sync.Map
 }
 
+func NewAvroDecoder(registry string) *AvroDecoder {
+	return &AvroDecoder{
+		schemaRegistryUrl: registry,
+		codecs:            new(sync.Map),
+	}
+
+}
+
 func (ad *AvroDecoder) DecodeValue(data []byte) (map[string]interface{}, error) {
 
 	if schemaId, err := getSchemaId(data); err != nil {
