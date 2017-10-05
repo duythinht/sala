@@ -9,6 +9,7 @@ type Config struct {
 	Decoder Decoder
 }
 
+// NewConfig create a sala config, which pass by kafka addrs, topics and group name
 func NewConfig(addrs string, topics string, group string) *Config {
 	brokers := strings.Split(addrs, ",")
 	topicsList := strings.Split(topics, ",")
