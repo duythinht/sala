@@ -1,6 +1,7 @@
 # sala
 My Kafka consumer wrapper, based on  sarama-cluster
 
+## Simple
 ```
   config := sala.NewConfig("localhost:2020,remotehost:3222", "hello,world", "testgroup")
   config.Decoder = YourDecoder //should declare first
