@@ -8,12 +8,14 @@ import (
 	cluster "github.com/bsm/sarama-cluster"
 )
 
+// Worker struct
 type Worker struct {
 	consumer *cluster.Consumer
 	cfg      *Config
 	apply    func(map[string]interface{})
 }
 
+// NewWorker return a sala worker
 func NewWorker(c *Config, options *cluster.Config) *Worker {
 
 	if options == nil {
